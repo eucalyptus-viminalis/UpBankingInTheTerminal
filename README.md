@@ -12,19 +12,48 @@ A secure CLI for the [Up Banking API](https://developer.up.com.au/), built in Ru
 
 ## Installation
 
-```bash
-# Clone and build
-cd packages/UpBankingInTheTerminal
-cargo build --release
+### Quick install (macOS / Linux)
 
-# Binary is at:
-./target/release/upbanking-in-the-terminal
+```bash
+curl -fsSL https://raw.githubusercontent.com/eucalyptus-viminalis/UpBankingInTheTerminal/main/scripts/install.sh | bash
 ```
 
-Optionally alias it:
+This detects your OS and architecture, downloads the latest release binary, and installs it to `/usr/local/bin`.
+
+To install to a custom location:
 
 ```bash
-alias upbank="$(pwd)/target/release/upbanking-in-the-terminal"
+INSTALL_DIR=~/.local/bin curl -fsSL https://raw.githubusercontent.com/eucalyptus-viminalis/UpBankingInTheTerminal/main/scripts/install.sh | bash
+```
+
+### Download from GitHub Releases
+
+Pre-built binaries for macOS (Intel + Apple Silicon), Linux, and Windows are available on the [Releases page](https://github.com/eucalyptus-viminalis/UpBankingInTheTerminal/releases).
+
+### Build from source
+
+```bash
+git clone https://github.com/eucalyptus-viminalis/UpBankingInTheTerminal.git
+cd UpBankingInTheTerminal
+cargo build --release
+# Binary is at ./target/release/upbank
+```
+
+## Uninstalling
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/eucalyptus-viminalis/UpBankingInTheTerminal/main/scripts/uninstall.sh | bash
+```
+
+The uninstaller removes the binary and gives you the option to keep or remove your config directory (which contains your saved API token).
+
+### Manual uninstall
+
+```bash
+rm -f /usr/local/bin/upbank
+
+# Optional — remove config (contains your saved token)
+rm -rf ~/.config/upbanking
 ```
 
 ## Authentication
@@ -32,17 +61,17 @@ alias upbank="$(pwd)/target/release/upbanking-in-the-terminal"
 Token resolution is tiered (env var takes priority):
 
 1. `UP_API_TOKEN` environment variable
-2. Config file at `~/.config/UpBankingInTheTerminal/config.toml`
+2. Config file at `~/.config/upbanking/config.toml`
 
 ```bash
 # Option 1: env var
 export UP_API_TOKEN="up:yeah:xxxxxxx"
 
 # Option 2: save to config file (created with 0600 permissions)
-upbanking-in-the-terminal config set-token "up:yeah:xxxxxxx"
+upbank config set-token "up:yeah:xxxxxxx"
 
 # View current token (masked)
-upbanking-in-the-terminal config show-token
+upbank config show-token
 ```
 
 Generate a Personal Access Token in the Up app under **Data Sharing > Personal Access Token**, or at [api.up.com.au](https://api.up.com.au).
@@ -54,95 +83,95 @@ All commands support `--json` for machine-readable output.
 ### Ping
 
 ```bash
-upbanking-in-the-terminal ping
+upbank ping
 ```
 
 ### Accounts
 
 ```bash
 # List all accounts
-upbanking-in-the-terminal accounts list
+upbank accounts list
 
 # Filter by type
-upbanking-in-the-terminal accounts list --account-type SAVER
-upbanking-in-the-terminal accounts list --account-type TRANSACTIONAL
-upbanking-in-the-terminal accounts list --account-type HOME_LOAN
+upbank accounts list --account-type SAVER
+upbank accounts list --account-type TRANSACTIONAL
+upbank accounts list --account-type HOME_LOAN
 
 # Filter by ownership
-upbanking-in-the-terminal accounts list --ownership-type JOINT
+upbank accounts list --ownership-type JOINT
 
 # Get a specific account
-upbanking-in-the-terminal accounts get <account-id>
+upbank accounts get <account-id>
 ```
 
 ### Transactions
 
 ```bash
 # List all transactions
-upbanking-in-the-terminal transactions list
+upbank transactions list
 
 # Filter by status
-upbanking-in-the-terminal transactions list --status SETTLED
-upbanking-in-the-terminal transactions list --status HELD
+upbank transactions list --status SETTLED
+upbank transactions list --status HELD
 
 # Filter by date range (RFC-3339)
-upbanking-in-the-terminal transactions list --since 2024-01-01T00:00:00Z --until 2024-12-31T23:59:59Z
+upbank transactions list --since 2024-01-01T00:00:00Z --until 2024-12-31T23:59:59Z
 
 # Filter by category or tag
-upbanking-in-the-terminal transactions list --category groceries
-upbanking-in-the-terminal transactions list --tag holidays
+upbank transactions list --category groceries
+upbank transactions list --tag holidays
 
 # Filter to a specific account
-upbanking-in-the-terminal transactions list --account <account-id>
+upbank transactions list --account <account-id>
 
 # Combine filters
-upbanking-in-the-terminal transactions list --status SETTLED --category groceries --since 2024-06-01T00:00:00Z
+upbank transactions list --status SETTLED --category groceries --since 2024-06-01T00:00:00Z
 
 # Get a specific transaction (detailed view)
-upbanking-in-the-terminal transactions get <transaction-id>
+upbank transactions get <transaction-id>
 ```
 
 ### Categories
 
 ```bash
 # List all categories
-upbanking-in-the-terminal categories list
+upbank categories list
 
 # List children of a parent category
-upbanking-in-the-terminal categories list --parent good-life
+upbank categories list --parent good-life
 
 # Get a specific category
-upbanking-in-the-terminal categories get groceries
+upbank categories get groceries
 ```
 
 ### Tags
 
 ```bash
-upbanking-in-the-terminal tags
-upbanking-in-the-terminal tags --page-size 50
+upbank tags
+upbank tags --page-size 50
 ```
 
 ### Attachments
 
 ```bash
 # List all attachments
-upbanking-in-the-terminal attachments list
+upbank attachments list
 
 # Get attachment details (includes temporary download URL)
-upbanking-in-the-terminal attachments get <attachment-id>
+upbank attachments get <attachment-id>
 ```
 
 ### Webhooks
 
 ```bash
 # List all webhooks
-upbanking-in-the-terminal webhooks list
+upbank webhooks list
 
 # Get webhook details
-upbanking-in-the-terminal webhooks get <webhook-id>
+upbank webhooks get <webhook-id>
 
 # View delivery logs
-upbanking-in-the-terminal webhooks logs <webhook-id>
+upbank webhooks logs <webhook-id>
 ```
 
 ### JSON output
@@ -150,8 +179,8 @@ upbanking-in-the-terminal webhooks logs <webhook-id>
 Add `--json` to any command for JSON output:
 
 ```bash
-upbanking-in-the-terminal --json accounts list
-upbanking-in-the-terminal --json transactions list --status SETTLED | jq '.[] | .amount'
+upbank --json accounts list
+upbank --json transactions list --status SETTLED | jq '.[] | .amount'
 ```
 
 ## Pagination
@@ -159,7 +188,7 @@ upbanking-in-the-terminal --json transactions list --status SETTLED | jq '.[] | 
 List commands return the first page of results by default. Use `--page-size` to control how many results are returned (max varies by endpoint, typically up to 100):
 
 ```bash
-upbanking-in-the-terminal transactions list --page-size 100
+upbank transactions list --page-size 100
 ```
 
 ## Project Structure

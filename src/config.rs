@@ -4,14 +4,13 @@ use std::io::Write;
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::PathBuf;
 
-use directories::ProjectDirs;
 use secrecy::{ExposeSecret, SecretString};
 use serde::Deserialize;
 use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum ConfigError {
-    #[error("No API token found. Set UP_API_TOKEN env var or run `upbanking-in-the-terminal config set-token`")]
+    #[error("No API token found. Set UP_API_TOKEN env var or run `upbank config set-token`")]
     NoToken,
     #[error("Failed to read config file: {0}")]
     ReadFile(#[from] std::io::Error),
@@ -25,8 +24,7 @@ struct ConfigFile {
 }
 
 fn config_dir() -> Option<PathBuf> {
-    ProjectDirs::from("au", "upbanking", "UpBankingInTheTerminal")
-        .map(|dirs| dirs.config_dir().to_path_buf())
+    dirs::home_dir().map(|home| home.join(".config").join("upbanking"))
 }
 
 fn config_path() -> Option<PathBuf> {
@@ -35,7 +33,7 @@ fn config_path() -> Option<PathBuf> {
 
 /// Load the API token using tiered resolution:
 /// 1. UP_API_TOKEN environment variable (highest priority)
-/// 2. Config file (~/.config/UpBankingInTheTerminal/config.toml)
+/// 2. Config file (platform-specific, via `directories` crate)
 pub fn load_token() -> Result<SecretString, ConfigError> {
     // Tier 1: Environment variable
     if let Ok(token) = std::env::var("UP_API_TOKEN") {
