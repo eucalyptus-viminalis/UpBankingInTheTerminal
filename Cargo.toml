@@ -1,6 +1,6 @@
 [package]
 name = "upbanking-in-the-terminal"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 description = "A secure CLI for the Up Banking API"
 license = "MIT"
