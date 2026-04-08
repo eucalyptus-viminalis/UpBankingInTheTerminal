@@ -15,6 +15,7 @@ A secure CLI for the [Up Banking API](https://developer.up.com.au/), built in Ru
   - [JSON output](#json-output)
 - [Pagination](#pagination)
 - [Installation](#installation)
+- [Updating](#updating)
 - [Uninstalling](#uninstalling)
 - [Security](#security)
 - [Project Structure](#project-structure)
@@ -206,15 +207,31 @@ cargo build --release
 # Binary is at ./target/release/upbank
 ```
 
+## Updating
+
+```bash
+upbank update
+```
+
+This checks GitHub for the latest release, and if a newer version is available, downloads and replaces the binary in place.
+
 ## Uninstalling
+
+```bash
+upbank uninstall
+```
+
+This removes the binary and gives you the option to keep or remove your config directory (which contains your saved API token).
+
+### Alternative methods
+
+You can also uninstall via the standalone script:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/eucalyptus-viminalis/UpBankingInTheTerminal/main/scripts/uninstall.sh | bash
 ```
 
-The uninstaller removes the binary and gives you the option to keep or remove your config directory (which contains your saved API token).
-
-### Manual uninstall
+Or manually:
 
 ```bash
 rm -f /usr/local/bin/upbank
