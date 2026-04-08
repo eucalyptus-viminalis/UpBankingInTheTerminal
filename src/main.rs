@@ -61,6 +61,9 @@ enum Commands {
 
     /// Remove upbank from your system
     Uninstall,
+
+    /// Update upbank to the latest version
+    Update,
 }
 
 #[derive(Subcommand)]
@@ -205,6 +208,14 @@ async fn main() {
             }
             return;
         }
+        Commands::Update => {
+            let rt = tokio::runtime::Handle::current();
+            if let Err(e) = rt.block_on(commands::update::run()) {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
+            return;
+        }
         _ => {}
     }
 
@@ -306,7 +317,7 @@ async fn main() {
             }
         },
 
-        Commands::Config(_) | Commands::Uninstall => unreachable!(),
+        Commands::Config(_) | Commands::Uninstall | Commands::Update => unreachable!(),
     };
 
     if let Err(e) = result {

@@ -6,4 +6,5 @@ pub mod ping;
 pub mod tags;
 pub mod transactions;
 pub mod uninstall;
+pub mod update;
 pub mod webhooks;
