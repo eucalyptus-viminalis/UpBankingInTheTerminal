@@ -58,6 +58,9 @@ enum Commands {
     /// Manage CLI configuration
     #[command(subcommand)]
     Config(ConfigCmd),
+
+    /// Remove upbank from your system
+    Uninstall,
 }
 
 #[derive(Subcommand)]
@@ -182,17 +185,27 @@ enum ConfigCmd {
 async fn main() {
     let cli = Cli::parse();
 
-    // Config commands don't need a token
-    if let Commands::Config(cmd) = &cli.command {
-        let result = match cmd {
-            ConfigCmd::SetToken { token } => commands::config_cmd::set_token(token),
-            ConfigCmd::ShowToken => commands::config_cmd::show_token(),
-        };
-        if let Err(e) = result {
-            eprintln!("Error: {}", e);
-            std::process::exit(1);
+    // Commands that don't need a token
+    match &cli.command {
+        Commands::Config(cmd) => {
+            let result = match cmd {
+                ConfigCmd::SetToken { token } => commands::config_cmd::set_token(token),
+                ConfigCmd::ShowToken => commands::config_cmd::show_token(),
+            };
+            if let Err(e) = result {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
+            return;
         }
-        return;
+        Commands::Uninstall => {
+            if let Err(e) = commands::uninstall::run() {
+                eprintln!("Error: {}", e);
+                std::process::exit(1);
+            }
+            return;
+        }
+        _ => {}
     }
 
     // All other commands require authentication
@@ -293,7 +306,7 @@ async fn main() {
             }
         },
 
-        Commands::Config(_) => unreachable!(),
+        Commands::Config(_) | Commands::Uninstall => unreachable!(),
     };
 
     if let Err(e) = result {

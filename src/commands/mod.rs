@@ -5,4 +5,5 @@ pub mod config_cmd;
 pub mod ping;
 pub mod tags;
 pub mod transactions;
+pub mod uninstall;
 pub mod webhooks;
