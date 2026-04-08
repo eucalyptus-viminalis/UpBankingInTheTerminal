@@ -60,13 +60,10 @@ rm -rf ~/.config/upbanking
 
 ### 1. Get your Personal Access Token
 
-You need a Personal Access Token (PAT) from Up to use this CLI. Here's how to get one:
+You need a Personal Access Token (PAT) from Up to use this CLI.
 
-1. Open the **Up app** on your phone
-2. Go to **Settings** (the gear icon)
-3. Tap **Data Sharing**
-4. Tap **Personal Access Token**
-5. Follow the prompts to generate a token
+1. Go to [api.up.com.au/getting_started](https://api.up.com.au/getting_started)
+2. Follow the prompts to generate your token
 
 Your token will look something like `up:yeah:aBcDeFgHiJkLmNoPqRsTuVwXyZ123456`
 
