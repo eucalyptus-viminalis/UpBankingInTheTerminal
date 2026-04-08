@@ -2,6 +2,23 @@
 
 A secure CLI for the [Up Banking API](https://developer.up.com.au/), built in Rust.
 
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+  - [Accounts](#accounts)
+  - [Transactions](#transactions)
+  - [Categories](#categories)
+  - [Tags](#tags)
+  - [Attachments](#attachments)
+  - [Webhooks](#webhooks)
+  - [JSON output](#json-output)
+- [Pagination](#pagination)
+- [Installation](#installation)
+- [Uninstalling](#uninstalling)
+- [Security](#security)
+- [Project Structure](#project-structure)
+
 ## Getting Started
 
 ### 1. Install
