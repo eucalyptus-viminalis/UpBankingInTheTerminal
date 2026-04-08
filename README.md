@@ -56,25 +56,45 @@ rm -f /usr/local/bin/upbank
 rm -rf ~/.config/upbanking
 ```
 
-## Authentication
+## Getting Started
 
-Token resolution is tiered (env var takes priority):
+### 1. Get your Personal Access Token
 
-1. `UP_API_TOKEN` environment variable
-2. Config file at `~/.config/upbanking/config.toml`
+You need a Personal Access Token (PAT) from Up to use this CLI. Here's how to get one:
+
+1. Open the **Up app** on your phone
+2. Go to **Settings** (the gear icon)
+3. Tap **Data Sharing**
+4. Tap **Personal Access Token**
+5. Follow the prompts to generate a token
+
+Your token will look something like `up:yeah:aBcDeFgHiJkLmNoPqRsTuVwXyZ123456`
+
+> **Keep this token safe.** Anyone with your token can read your account and transaction data. Don't share it, don't commit it to git, and don't paste it anywhere public.
+
+### 2. Save your token
 
 ```bash
-# Option 1: env var
-export UP_API_TOKEN="up:yeah:xxxxxxx"
-
-# Option 2: save to config file (created with 0600 permissions)
-upbank config set-token "up:yeah:xxxxxxx"
-
-# View current token (masked)
-upbank config show-token
+upbank config set-token "up:yeah:your-token-here"
 ```
 
-Generate a Personal Access Token in the Up app under **Data Sharing > Personal Access Token**, or at [api.up.com.au](https://api.up.com.au).
+This saves it to `~/.config/upbanking/config.toml` with restricted file permissions (only your user can read it).
+
+### 3. Verify it works
+
+```bash
+upbank ping
+```
+
+You should see a success message with a emoji if everything is connected.
+
+### Alternative: environment variable
+
+If you prefer not to save the token to disk, you can set it as an environment variable instead. This takes priority over the config file:
+
+```bash
+export UP_API_TOKEN="up:yeah:your-token-here"
+```
 
 ## Usage
 
