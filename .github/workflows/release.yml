@@ -37,12 +37,12 @@ jobs:
           targets: ${{ matrix.target }}
 
       - name: Build release binary
-        working-directory: packages/UpBankingInTheTerminal
+        working-directory: .
         run: cargo build --release --target ${{ matrix.target }}
 
       - name: Package binary (unix)
         if: matrix.os != 'windows-latest'
-        working-directory: packages/UpBankingInTheTerminal
+        working-directory: .
         run: |
           cd target/${{ matrix.target }}/release
           tar czf ../../../${{ matrix.name }}.tar.gz upbanking-in-the-terminal
@@ -50,7 +50,7 @@ jobs:
 
       - name: Package binary (windows)
         if: matrix.os == 'windows-latest'
-        working-directory: packages/UpBankingInTheTerminal
+        working-directory: .
         run: |
           cd target/${{ matrix.target }}/release
           7z a ../../../${{ matrix.name }}.zip upbanking-in-the-terminal.exe
@@ -61,8 +61,8 @@ jobs:
         with:
           name: ${{ matrix.name }}
           path: |
-            packages/UpBankingInTheTerminal/${{ matrix.name }}.tar.gz
-            packages/UpBankingInTheTerminal/${{ matrix.name }}.zip
+            ${{ matrix.name }}.tar.gz
+            ${{ matrix.name }}.zip
 
   release:
     needs: build
