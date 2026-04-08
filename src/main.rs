@@ -10,7 +10,7 @@ use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
 #[command(
-    name = "upbanking",
+    name = "upbank",
     about = "A secure CLI for the Up Banking API",
     version
 )]
