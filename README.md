@@ -2,63 +2,17 @@
 
 A secure CLI for the [Up Banking API](https://developer.up.com.au/), built in Rust.
 
-## Security
+## Getting Started
 
-- **Rust** — memory-safe, compiled binary with no runtime dependencies
-- **rustls** — pure-Rust TLS (no OpenSSL)
-- **secrecy::SecretString** — API token is zeroized from memory on drop
-- **0600 permissions** — config file is owner-read/write only
-- **No token flags** — token is never passed as a CLI argument; loaded from env var or config file
-
-## Installation
-
-### Quick install (macOS / Linux)
+### 1. Install
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/eucalyptus-viminalis/UpBankingInTheTerminal/main/scripts/install.sh | bash
 ```
 
-This detects your OS and architecture, downloads the latest release binary, and installs it to `/usr/local/bin`.
+See [Installation](#installation) for other ways to install (GitHub Releases, build from source).
 
-To install to a custom location:
-
-```bash
-INSTALL_DIR=~/.local/bin curl -fsSL https://raw.githubusercontent.com/eucalyptus-viminalis/UpBankingInTheTerminal/main/scripts/install.sh | bash
-```
-
-### Download from GitHub Releases
-
-Pre-built binaries for macOS (Intel + Apple Silicon), Linux, and Windows are available on the [Releases page](https://github.com/eucalyptus-viminalis/UpBankingInTheTerminal/releases).
-
-### Build from source
-
-```bash
-git clone https://github.com/eucalyptus-viminalis/UpBankingInTheTerminal.git
-cd UpBankingInTheTerminal
-cargo build --release
-# Binary is at ./target/release/upbank
-```
-
-## Uninstalling
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/eucalyptus-viminalis/UpBankingInTheTerminal/main/scripts/uninstall.sh | bash
-```
-
-The uninstaller removes the binary and gives you the option to keep or remove your config directory (which contains your saved API token).
-
-### Manual uninstall
-
-```bash
-rm -f /usr/local/bin/upbank
-
-# Optional — remove config (contains your saved token)
-rm -rf ~/.config/upbanking
-```
-
-## Getting Started
-
-### 1. Get your Personal Access Token
+### 2. Get your Personal Access Token
 
 You need a Personal Access Token (PAT) from Up to use this CLI.
 
@@ -69,7 +23,7 @@ Your token will look something like `up:yeah:aBcDeFgHiJkLmNoPqRsTuVwXyZ123456`
 
 > **Keep this token safe.** Anyone with your token can read your account and transaction data. Don't share it, don't commit it to git, and don't paste it anywhere public.
 
-### 2. Save your token
+### 3. Save your token
 
 ```bash
 upbank config set-token "up:yeah:your-token-here"
@@ -77,21 +31,19 @@ upbank config set-token "up:yeah:your-token-here"
 
 This saves it to `~/.config/upbanking/config.toml` with restricted file permissions (only your user can read it).
 
-### 3. Verify it works
+Alternatively, set it as an environment variable (takes priority over the config file):
+
+```bash
+export UP_API_TOKEN="up:yeah:your-token-here"
+```
+
+### 4. Verify it works
 
 ```bash
 upbank ping
 ```
 
-You should see a success message with a emoji if everything is connected.
-
-### Alternative: environment variable
-
-If you prefer not to save the token to disk, you can set it as an environment variable instead. This takes priority over the config file:
-
-```bash
-export UP_API_TOKEN="up:yeah:your-token-here"
-```
+You should see a success message if everything is connected.
 
 ## Usage
 
@@ -207,6 +159,60 @@ List commands return the first page of results by default. Use `--page-size` to 
 ```bash
 upbank transactions list --page-size 100
 ```
+
+## Installation
+
+### Quick install (macOS / Linux)
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/eucalyptus-viminalis/UpBankingInTheTerminal/main/scripts/install.sh | bash
+```
+
+This detects your OS and architecture, downloads the latest release binary, and installs it to `/usr/local/bin`.
+
+To install to a custom location:
+
+```bash
+INSTALL_DIR=~/.local/bin curl -fsSL https://raw.githubusercontent.com/eucalyptus-viminalis/UpBankingInTheTerminal/main/scripts/install.sh | bash
+```
+
+### Download from GitHub Releases
+
+Pre-built binaries for macOS (Intel + Apple Silicon), Linux, and Windows are available on the [Releases page](https://github.com/eucalyptus-viminalis/UpBankingInTheTerminal/releases).
+
+### Build from source
+
+```bash
+git clone https://github.com/eucalyptus-viminalis/UpBankingInTheTerminal.git
+cd UpBankingInTheTerminal
+cargo build --release
+# Binary is at ./target/release/upbank
+```
+
+## Uninstalling
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/eucalyptus-viminalis/UpBankingInTheTerminal/main/scripts/uninstall.sh | bash
+```
+
+The uninstaller removes the binary and gives you the option to keep or remove your config directory (which contains your saved API token).
+
+### Manual uninstall
+
+```bash
+rm -f /usr/local/bin/upbank
+
+# Optional — remove config (contains your saved token)
+rm -rf ~/.config/upbanking
+```
+
+## Security
+
+- **Rust** — memory-safe, compiled binary with no runtime dependencies
+- **rustls** — pure-Rust TLS (no OpenSSL)
+- **secrecy::SecretString** — API token is zeroized from memory on drop
+- **0600 permissions** — config file is owner-read/write only
+- **No token flags** — token is never passed as a CLI argument; loaded from env var or config file
 
 ## Project Structure
 
